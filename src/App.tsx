@@ -1,4 +1,15 @@
-const App = () => {
+import { useState, ChangeEvent } from "react";
+
+const App = (): JSX.Element => {
+  // https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+  const [term, setTerm] = useState<string>('');
+
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTerm(e.target.value);
+    console.log(term);  
+    
+  };
+
   return (
     <main className="bg-[url('https://img.freepik.com/free-photo/abstract-grunge-decorative-relief-navy-blue-stucco-wall-texture-wide-angle-rough-colored-background_1258-28311.jpg?w=2000')]
      h-[100vh] w-full flex justify-center items-center">
@@ -14,11 +25,12 @@ const App = () => {
           Enter below a place you want to know the weather of and select an option from the dropdown
         </p>
 
-        <div>
+        <div className="flex mt-10 md:mt-4">
           <input 
             type="text" 
-            value={'k'} 
-            className="px-2 py-1 rounded-l-md border-2 border-white" 
+            value={term} 
+            className="px-2 py-1 rounded-l-md border-2 border-white"
+            onChange={onInputChange}
           />
 
           <button className="rounded-r-md border-2 border-zinc-100 hover:border-zinc-500
