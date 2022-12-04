@@ -1,14 +1,31 @@
 import { useState, ChangeEvent } from "react";
 
+import { optionType } from './types';
+
 const App = (): JSX.Element => {
   // https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
   const [term, setTerm] = useState<string>('');
+  const [ options, setOptions ] = useState<[]>([]);
+
+  const getSearchOptions = (value: string) => {
+    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${value.trim()}&limit=5&appid=${process.env.REACT_APP_API_KEY}`)
+    .then(res => res.json())
+    .then((data) => setOptions(data));
+  }
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTerm(e.target.value);
-    console.log(term);  
+    const value = e.target.value.trim();
+    setTerm(value);
     
+    if (value === '') return ;
+
+    getSearchOptions(value);
   };
+
+  const onOptionSelect = (option: optionType) => {
+    console.log(option.name);
+    
+  }
 
   return (
     <main className="bg-[url('https://img.freepik.com/free-photo/abstract-grunge-decorative-relief-navy-blue-stucco-wall-texture-wide-angle-rough-colored-background_1258-28311.jpg?w=2000')]
@@ -25,13 +42,26 @@ const App = (): JSX.Element => {
           Enter below a place you want to know the weather of and select an option from the dropdown
         </p>
 
-        <div className="flex mt-10 md:mt-4">
+        <div className=" relative flex mt-10 md:mt-4">
           <input 
             type="text" 
             value={term} 
             className="px-2 py-1 rounded-l-md border-2 border-white"
             onChange={onInputChange}
           />
+
+          <ul className="absolute top-9 bg-white ml-1 rounded-b-md">
+            {options.map((option: optionType, index: number ) => (
+              <li key={option.name + '-' + index}>
+                <button className="text-left text-sm w-full hover:bg-zinc-700
+                hover:text-white px-2 py-1 cursor-pointer"
+                onClick={() => onOptionSelect(option)}
+                >
+                    {option.name}
+                </button>
+              </li>
+            ))}
+          </ul>
 
           <button className="rounded-r-md border-2 border-zinc-100 hover:border-zinc-500
             hover:text-zinc-500 text-zinc-100 px-2 py-1 cursor-pointer
