@@ -1,10 +1,11 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 
 import { optionType } from './types';
 
 const App = (): JSX.Element => {
   // https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
   const [term, setTerm] = useState<string>('');
+  const [city, setCity] = useState<optionType | null>(null); 
   const [ options, setOptions ] = useState<[]>([]);
 
   const getSearchOptions = (value: string) => {
@@ -22,10 +23,26 @@ const App = (): JSX.Element => {
     getSearchOptions(value);
   };
 
-  const onOptionSelect = (option: optionType) => {
-    console.log(option.name);
-    
+  const onSubmit = () => {
+    if (!city) return 
+
+    getForecast(city);
   }
+
+  const onOptionSelect = (option: optionType) => {
+    setCity(option);
+    
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${option.lat}&lon=${option.lon}&units=metric&appid=${process.env.REACT_APP_API_KEY}`)
+    .then(res => res.json())
+    .then(data => console.log({ data }));
+  }
+
+  useEffect(() => {
+    if(city) {
+      setTerm(city.name);
+      setOptions([]);
+    }
+  }, [city]);
 
   return (
     <main className="bg-[url('https://img.freepik.com/free-photo/abstract-grunge-decorative-relief-navy-blue-stucco-wall-texture-wide-angle-rough-colored-background_1258-28311.jpg?w=2000')]
