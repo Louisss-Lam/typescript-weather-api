@@ -1,4 +1,4 @@
-import { getSunTime, getWindDirection } from "../helpers";
+import { getHumidityValue, getSunTime, getWindDirection, getPop } from "../helpers";
 import { forecastType } from "../types";
 import Sunrise from "./Icons/Sunrise";
 import Sunset from "./Icons/Sunset";
@@ -89,7 +89,24 @@ const Forecast = ({ data }: Props): JSX.Element => {
                     }`}
                 />
 
-                
+                {/* humidity */}
+                <Tile 
+                    icon="humidity" 
+                    title="Humidity" 
+                    info={`${today.main.humidity} %`}
+                    description={getHumidityValue(today.main.humidity)}
+                />
+
+                {/* pop */}
+                <Tile 
+                    icon="pop" 
+                    title="Precipitation" 
+                    info={`${Math.round(today.pop * 1000)}`}
+                    description={`${getPop(today.pop)}, clouds at ${today.clouds.all}`}
+                />
+
+
+
             </section>
         </div>
     </div>
