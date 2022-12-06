@@ -1,5 +1,6 @@
 export type optionType = {
     name: string
+    country: String
     lat: number
     lon: number
 }

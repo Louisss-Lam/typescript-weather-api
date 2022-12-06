@@ -47,7 +47,7 @@ const Search = ({
                 hover:text-white px-2 py-1 cursor-pointer"
                 onClick={() => onOptionSelect(option)}
                 >
-                    {option.name}
+                    {option.name}, {option.country}
                 </button>
               </li>
             ))}
