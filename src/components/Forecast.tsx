@@ -77,6 +77,18 @@ const Forecast = ({ data }: Props): JSX.Element => {
                     description={`${getWindDirection(Math.round(today.wind.deg))}, gust ${today.wind.gust.toFixed(1)} km/h`}
                 />
 
+                {/* feels like */}
+                <Tile 
+                    icon="feels" 
+                    title="Feels like" 
+                    info={<Degree temp={Math.round(today.main.feels_like)} />}
+                    description={`Feels ${
+                        Math.round(today.main.feels_like) < Math.round(today.main.temp)
+                            ? 'colder'
+                            : 'warmer'
+                    }`}
+                />
+
                 
             </section>
         </div>
